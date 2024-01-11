@@ -12,7 +12,7 @@ interface GenreDao {
     suspend fun insertGenres(
         mediaEntities: List<GenreEntity>
     )
-
+//Dao accesss
     @Query(
         "SELECT * FROM genreentity WHERE type = :mediaType"
     )
