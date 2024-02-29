@@ -2,10 +2,15 @@ package com.ahmedapps.themovies.main.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,9 +35,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge()
         setContent {
             TheMoviesTheme {
+                ChangeSystemBarsTheme(!isSystemInDarkTheme())
 
                 val mainViewModel = hiltViewModel<MainViewModel>()
                 val mainUiState = mainViewModel.mainUiState.collectAsState().value
@@ -51,6 +57,31 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    }
+    @Composable
+    private fun ChangeSystemBarsTheme(lightTheme: Boolean) {
+        val barColor = MaterialTheme.colorScheme.background.toArgb()
+        LaunchedEffect(lightTheme) {
+            if (lightTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.light(
+                        barColor, barColor,
+                    ),
+                    navigationBarStyle = SystemBarStyle.light(
+                        barColor, barColor,
+                    ),
+                )
+            } else {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.dark(
+                        barColor,
+                    ),
+                    navigationBarStyle = SystemBarStyle.dark(
+                        barColor,
+                    ),
+                )
+            }
+        }
     }
 }
 
