@@ -9,11 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 private val LightColors = lightColorScheme(
@@ -109,36 +105,10 @@ fun TheMoviesTheme(
         }
     }
 
-    val backgroundColor: Color = if (!darkTheme) {
-        md_theme_light_surface
-    } else {
-        md_theme_dark_surface
-    }
-
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setStatusBarColor(backgroundColor)
-    }
-
     MaterialTheme(
         colorScheme = colors,
         typography = Typography,
         shapes = Shapes(),
         content = content
     )
-}
-
-@Composable
-fun StatusBar(
-    color: Color,
-    backgroundColor: Color
-) {
-
-    val systemUiController = rememberSystemUiController()
-    DisposableEffect(key1 = color) {
-        systemUiController.setStatusBarColor(color)
-        onDispose {
-            systemUiController.setStatusBarColor(backgroundColor)
-        }
-    }
 }
